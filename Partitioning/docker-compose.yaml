@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  postgres_db_partition:
+    image: postgres
+    restart: on-failure
+    env_file:
+      - .env
+    command: -p ${POSTGRES_PORT}
+    container_name: "postgres_db_partition"
+    expose:
+      - ${POSTGRES_PORT}
+  db_partition_app:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres_db_partition
+    container_name: "db_partition_app"
+    image: app:v1
+    command: node app.js
+  
+    
+    
+   
